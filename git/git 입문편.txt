@@ -1,0 +1,274 @@
+Git
+Git이란 소소코드를 효과적으로 관리하기 위해 개발된 '분산형 버전 관리 시스템'입니다.
+원래는 Linux 소소코드를 관리할 목적으로 개발되었습니다.
+
+소스코드가 변경된 이력을 쉽게 확인할 수 있고, 특정 시점에 저장된 버전과 비교하거나
+특정 시점으로 되돌아갈수도 있습니다. 또 내가 올리려는 파일이 누군가 편집한 내용과
+충동한다면, 서버에 업로드 할 때 경고 메시지가 발생됩니다. 
+
+저장소(Git repository)란 말그대로 파일이나 폴더를 저장해 두는 곳입니다. 파일이 변경
+이력 별로 구분되어 저장된다는 점입니다. 비슷한 파일이라도 실제 내용 일부 문구가 서로
+다르면 다른 파일로 인식하기 때문에 파일을 변경 사항 별로 구분해 저장할 수 있습니다.
+
+Git은 원격 저장소와 로컬 저장소 두 종류의 저장소를 제공합니다.
+* 원격 저장소(Remote Repository) : 파일이 원격 저장소 전용 서버에서 관리되며 여러
+사람이 함께 공유하기 위한 저장소입니다.
+* 로컬 저장소(Local Repository) : 내 PC에 파일이 저장되는 개인 전용 저장소입니다.
+
+저장소 만들기
+내 컴퓨터에 로컬 저장소를 만드는 방법은 두 가지가 있습니다.
+첫 번째, 아예 저장소를 새로 만든다.
+두 번째, 이미 만들어져 있는 원격 저장소를 로컬 저장소로 복사한다.
+
+파일 및 폴더의 추가/변경 사항을 저장소에 기록하려면 '커밋'이란 버튼을 눌러줘야 합니다.
+커밋 버튼을 누르면 이전 커밋 상태부터 현재 상태까지의 변경 이력이 기록된 커밋(
+혹은 리비전(개정 프로세스))이 만들어집니다.
+커밋은 이력을 남기는 중요한 작업이기 때문에 커밋 버튼을 누를땐 커밋 메시지를 필
+수로 입력해야 합니다. 메시지가 없으면 커밋이 실행되지 않습니다.
+1번째 줄 : 커밋 내의 변경 내용을 요약
+2번째 줄 : 빈 칸
+3번째 줄 : 변경한 이유
+
+Git에서는 우리가 흔히 말하는 폴더를 '작업 트리'(Work Tree)라고 부릅니다.
+그리고 커밋을 실행하기 전의 저장소와 작업 트리 사이에 존재하는 공간을 '인덱스'
+라고 합니다.
+* 인덱스에 등록되지 않은 파일은 커밋이 안된다.
+작업트리 -> 등록 -> 인덱스 -> 커밋 -> 저장소
+Git의 '커밋'작업은 '작업트리'에 있는 변경 내용을 저장소에 바로 기록하는 것이 아니라
+그 사이 공간인 '인덱스'에 파일 상태를 기록(state - 스테이징 한다고 표현)하게 되어
+있습니다. 이렇게 인덱스란 공간이 중간에 있는 덕분에 작업 트리 안에 있는 커밋이 필요
+없는 파일들을 커밋에 포함하지 않을 수 있고, 파일에서 내가 원하는 일부 변경 사항만
+인덱스에 등록해 커밋할 수 있습니다.
+
+초기설정
+git 설정내역은 사용자 홈 폴더의 .gitconfig 파일에 기록됩니다. 직접 .gitconfig
+파일을 편집할 수도 있습니다.
+
+우선 "폴더명"폴더를 아무데나 생성해주세요. 
+"폴더명"폴더를 Git의 저장소로 등록하려면, 
+해당 폴더로 이동하여 init 명령어를 사용합니다.
+$ mkdir "폴더명"
+$ cd "폴더명"
+$ git init
+Initialized empty Git repository in /Users/yourname/Desktop/"폴더명"/.git/
+
+Git의 관리 하에 있는 폴더의 작업트리와 인덱스 상태를 확인하려면, status 명령어를 사용합니다.
+$ git status
+# On branch master
+#
+# Initial commit
+#
+# Untracked files:
+#   (use "git add <file>..." to include in what will be committed)
+#
+#     sample.txt
+nothing added to commit but untracked files present (use "git add" to track)
+이력 추적 대상이 되지 않은 파일(untracked files)로, sample.txt가 보이네요. 
+처음 한번만 인덱스에 등록하면 추적 대상으로 등록할 수 있습니다.
+
+파일을 인덱스에 등록하는 명령어는 add 입니다. 
+뒤에 <file>을 붙여 인덱스에 등록할 파일을 지정합니다. 
+한칸 띄어쓰기해서 여러개 파일을 한번에 지정할수도 있습니다.
+$ git add <file>..
+
+파라미터에 「.」를 지정하면, 모든 파일을 인덱스에 등록할 수 있습니다.
+$ git add .
+
+$ git add sample.txt
+$ git status
+# On branch master
+#
+# Initial commit
+#
+# Changes to be committed:
+#   (use "git rm --cached <file>..." to unstage)
+#
+#     new file:   sample.txt
+
+인덱스에 sample.txt가 추가되었으니 커밋 준비는 끝입니다. 
+이제 commit 명령어를 실행해 커밋을 진행합니다. 
+commit 명령어 포맷은 다음과 같습니다.
+
+$ git commit -m "<댓글>"
+
+$ git commit -m "first commit"
+[master (root-commit) 116a286] first commit
+ 0 files changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 sample.txt
+
+$ git status
+# On branch master
+nothing to commit (working directory clean)
+이제 모든 변경사항이 커밋되었습니다.
+
+저장소의 변경 이력을 확인해봅시다. 
+저장소 변경 이력을 보려면, log 명령어를 사용하세요.
+
+$ git log
+commit ac56e474afbbe1eab9ebce5b3ab48ac4c73ad60e
+Author: eguchi <eguchi@nulab.co.jp>
+Date:   Thu Jul 12 18:00:21 2012 +0900
+
+    first commit
+
+원격 저장소에 푸시(PUSH)하기 - 업로드
+내 PC의 로컬 저장소에서 변경된 이력을 원격 저장소에 공유하려면, 
+로컬 저장소의 변경 이력을 원격 저장소에 업로드해야 합니다.
+
+웹 상의 원격 저장소로 변경된 파일을 업로드하는 것을 Git에서는 푸시(Push)라고 합니다. 
+push 를 실행하면, 원격 저장소에 내 변경 이력이 업로드되어, 
+원격 저장소와 로컬 저장소가 동일한 상태가 됩니다.
+
+원격 저장소의 주소는 이름으로 기록해 둘 수 있습니다. 
+기록 해두면 push 할 때마다 긴 원격 저장소의 주소를 입력 할 필요가 없습니다. 
+우선 「origin」이라는 이름으로 원격 저장소를 등록하고 push합니다.
+원격 저장소를 추가하려면, remote 명령어를 사용합니다. 
+<name>은 등록명, <url>은 원격 저장소의 URL을 지정합니다.
+
+$ git remote add <name> <url>
+
+콘솔일 경우 push 나 pull 은 실행 시에 원격 저장소명을 생략하면, 
+origin이라는 이름의 원격 저장소를 사용합니다. 
+그 때문에 원격 저장소에는 origin이라는 이름을 붙이는 것이 일반적입니다.
+
+저장소를 push 하려면, push 명령어를 사용합니다. 
+<repository>는 push 경로의 주소, 
+<refspec>은 push 할 브랜치를 지정합니다.
+$ git push <repository> <refspec>...
+
+다음 명령어를 실행해 원격 저장소 origin에 커밋을 push합니다. 
+실행 옵션에서 한번 -u를 지정하면, 
+이후에는 그 브랜치명 지정을 생략할 수 있습니다. 
+단, 비어있는 원격 저장소에 최초로 push했을 때는 
+원격 저장소명과 브랜치명을 생략할 수 없습니다.
+
+도중에 사용자명과 비밀번호가 요구되면 
+Backlog의 사용자명과 비밀번호를 입력하십시오.
+
+--------------------주의---------------------------
+사용자명과 비밀번호 입력 후
+$ git push -u origin master
+remote: Unauthorized
+fatal: Authentication failed for 'https://jjhun0712.backlog.com/git/TUTORIAL/tutorial.git/'
+
+다음과 같이 뜰 경우 
+
+1. 제어판 - 사용자 계정 - 자격 증명 관리자
+2. Windows 자격 증명
+3. 일반 자격 증명
+4. git 관련 자격 증명 편집
+
+사용자 이름(email)과 비밀번호를 정확히 입력해주면 해결된다.
+------------------------------------------------------------------------------
+$ git push -u origin master
+Username: <사용자명>
+Password: <비밀번호>
+Counting objects: 3, done.
+Writing objects: 100% (3/3), 245 bytes, done.
+Total 3 (delta 0), reused 0 (delta 0)
+To https://monkey.backlogtool.com/git/BLG/tutorial.git
+ * [new branch]      master -> master
+
+원격 저장소 복제(Clone)하기
+누군가의 변경 이력이 적용된 원격 저장소가 있으면, 
+그걸 웹에서 통째로 복제해와 내 PC에서 직접 작업할 수 있습니다.
+
+원격 저장소를 복제하려면, 클론(Clone)이라는 조작을 수행합니다.
+
+복제란 원격 저장소의 내용을 통째로 다운로드하는 것을 말합니다. 
+복제한 저장소를 다른 PC에서 로컬 저장소로 사용할 수 있게 됩니다.
+변경 이력도 함께 로컬 저장소에 복제되어 오므로, 
+원래 원격 저장소와 똑같이 이력을 참조하고 커밋을 진행할 수 있습니다.
+
+<repository>는 원격 저장소의 URL, 
+<directory>는 복제대상의 폴더명을 지정합니다.
+
+$ git clone <repository> <directory>
+
+$ git clone https://monkey.backlogtool.com/git/BLG/tutorial.git tutorial2
+Cloning into 'tutorial2'...
+Username: <사용자명>
+Password: <비밀번호>
+remote: Counting objects: 3, done.
+remote: Total 3 (delta 0), reused 0 (delta 0)
+Unpacking objects: 100% (3/3), done.
+
+원격 저장소에서 풀(Pull)해오기 - 다운로드
+원격 저장소를 공유해 여러 사람이 함께 작업을 하면, 
+모두가 같은 원격 저장소에 푸시(Push)합니다. 
+그럼 다른 사람이 원격 저장소에 올려놓은(Push) 변경 내용을
+내 로컬 저장소에도 적용(Pull)할 필요가 있습니다.
+
+풀을 수행하려면 pull 명령어를 사용합니다. 
+만약 저장소명이 생략되면 origin의 이름으로 등록되어 있는 
+저장소 밑에 pull을 수행하게 됩니다.
+
+$ git pull <repository> <refspec>...
+
+$ git pull origin master
+Username: <사용자명>
+Password: <비밀번호>
+From https://monkey.backlogtool.com/git/BLG/tutorial
+ * branch            master     -> FETCH_HEAD
+Updating ac56e47..3da09c1
+Fast-forward
+ sample.txt |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+log 명령어로 이력을 확인 해 봅시다.
+
+$ git log
+commit 3da09c1134a41f2bee854a413916e4ebcae7318d
+Author: eguchi <eguchi@nulab.co.jp>
+Date:   Thu Jul 12 18:02:45 2012 +0900
+
+    add 설명을 추가함
+
+commit ac56e474afbbe1eab9ebce5b3ab48ac4c73ad60e
+Author: eguchi <eguchi@nulab.co.jp>
+Date:   Thu Jul 12 18:00:21 2012 +0900
+
+    first commit
+
+변경 이력 병합(Merge)하기
+
+내가 끌어온 저장소가 최신 버전이 아닌 경우, 
+즉 내가 pull 을 실행한 후 다른 사람이 push 를 하여 원격 저장소를 
+업데이트 해버린 경우에는 내 push 요청이 거부되어 버립니다.
+
+이런 경우 병합(merge)이라는 작업을 진행하여 
+다른 사람의 업데이트 이력을 내 저장소에도 갱신 해야합니다. 
+만약 병합하지 않은 채로 이력을 덮어쓰게 되면 다른 사람이 
+push 한 업데이트 내역(그림의 커밋C)이 사라져 버리기 때문입니다.
+
+그러나 경우에 따라 자동으로 병합할 수 없는 경우도 있습니다.
+
+바로 원격 저장소와 로컬 저장소 양쪽에서 파일의 동일한 부분을 변경한
+경우입니다. 이 경우 두 변경 내용중 어느 쪽을 저장할 것인지 자동으로 
+판단 할 수 없기 때문에 충돌이 발생합니다.
+
+Git 은 충돌이 발생한 파일 내용을 표시합니다. 
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+                   충돌이 발생한 곳
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+이 부분을 우리가 직접 수정해 주어야 합니다.
+
+===== 로 구분된 윗 부분이 로컬 저장소,
+아랫 부분이 원격 저장소의 변경 내용이라는 점!
+
+수정하고나서 다시 add와 commit한다.
+
+log 명령어로 이력을 확인 해 봅시다. 
+'graph' 를 지정하면 선으로 된 그림 형태로 이력 흐름이 표시됩니다. 
+'oneline'을 선택하면 한 줄로 커밋 정보가 표시됩니다.
+
+$ git log --graph --oneline
+*   d845b81 병합
+|\
+| * 4c01823 pull 설명을 추가
+* | 95f15c9 commit의 설명 추가
+|/
+* 3da09c1 add 설명을 추가
+* ac56e47 first commit
+
+이로써 이전 페이지에서는 거부되었던 push 를 할 수 있게 되었습니다.

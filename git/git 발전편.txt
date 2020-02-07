@@ -1,0 +1,609 @@
+브랜치
+소프트웨어를 개발할 때에 개발자들은 동일한 소스코드를 함께 공유하고
+다루게 됩니다. 동일한 소스코드 위에서 어떤 개발자는 버그를 수정하기도
+하고 또 다른 개발자는 새로운 기능을 만들어 내기도 하죠. 
+이와 같이 여러 사람이 동일한 소스코드를 기반으로 서로 다른 작업을 
+할 때에는 각각 서로 다른 버전의 코드가 만들어 질 수 밖에 없습니다.
+
+이럴 때, 여러 개발자들이 동시에 다양한 작업을 할 수 있게 만들어 주는
+기능이 바로 '브랜치(Branch)' 입니다. 각자 독립적인 작업 영역(저장소) 
+안에서 마음대로 소스코드를 변경할 수 있지요. 이렇게 분리된 작업 영역
+에서 변경된 내용은 나중에 원래의 버전과 비교해서 하나의 새로운 
+버전으로 만들어 낼 수 있습니다.
+
+브랜치란 독립적으로 어떤 작업을 진행하기 위한 개념입니다. 
+필요에 의해 만들어지는 각각의 브랜치는 다른 브랜치의 영향을 받지 
+않기 때문에, 여러 작업을 동시에 진행할 수 있습니다.
+또한 이렇게 만들어진 브랜치는 다른 브랜치와 병합(Merge)함으로써, 
+작업한 내용을 다시 새로운 하나의 브랜치로 모을 수 있습니다.
+여러 명이서 동시에 작업을 할 때에 다른 사람의 작업에 영향을 
+주거나 받지 않도록, 먼저 메인 브랜치에서 자신의 작업 전용 브랜치를 
+만듭니다. 그리고 각자 작업을 진행한 후, 작업이 끝난 사람은 메인 
+브랜치에 자신의 브랜치의 변경 사항을 적용합니다. 이렇게 함으로써 
+다른 사람의 작업에 영향을 받지 않고 독립적으로 특정 작업을 수행하고
+그 결과를 하나로 모아 나가게 됩니다. 이러한 방식으로 작업할 경우 
+'작업 단위', 즉 브랜치로 그 작업의 기록을 중간 중간에 남기게 되므로 
+문제가 발생했을 경우 원인이 되는 작업을 찾아내거나 그에 따른 
+대책을 세우기 쉬워집니다.
+
+master 브랜치 
+저장소를 처음 만들면, Git은 바로 'master'라는 이름의 브랜치를 만들어 
+둡니다. 이 새로운 저장소에 새로운 파일을 추가 한다거나 추가한 
+파일의 내용을 변경하여 그 내용을 저장(커밋, Commit)하는 것은 모두 
+'master' 라는 이름의 브랜치를 통해 처리할 수 있는 일이 됩니다.
+
+'master'가 아닌 또 다른 새로운 브랜치를 만들어서 '이제부터 이 
+브랜치를 사용할거야!'라고 선언(체크아웃, checkout)하지 않는 이상, 
+이 때의 모든 작업은 'master' 브랜치에서 이루어 집니다.
+
+통합 브랜치(Intergration Branch)
+통합 브랜치란 언제든지 배포할 수 있는 버전을 만들 수 있어야 하는 
+브랜치 입니다. 그렇기 때문에 늘 안정적인 상태를 유지하는 것이 
+중요합니다. 여기서 '안정적인 상태'란 현재 작업 중인 소스코드가 
+모바일에서 동작하는 어플리케이션을 개발하기 위한 것이라면, 
+'그 어플리케이션의 모든 기능이 정상적으로 동작하는 상태'를 
+의미합니다.
+
+만약 이 어플리케이션에 어떤 문제가 발견되어 그 문제(버그)를 
+수정한다던지 새로운 기능을 추가해야 한다던지 해야할 때, 
+바로 '토픽 브랜치(Topic branch)'를 만들 수 있습니다. 
+처음에는 보통 통합 브랜치에서 토픽 브랜치를 만들어 냅니다.
+
+일반적으로 저장소를 처음 만들었을 때에 생기는 'master' 브랜치를 
+통합 브랜치로 사용합니다.
+
+토픽 브랜치(Topic Branch)
+토픽 브랜치란, 기능 추가나 버그 수정과 같은 단위 작업을 위한 브랜치 
+입니다. 여러 개의 작업을 동시에 진행할 때에는, 그 수만큼 토픽 
+브랜치를 생성할 수 있습니다.
+
+토픽 브랜치는 보통 통합 브랜치로부터 만들어 내며, 토픽 브랜치에서 
+특정 작업이 완료되면 다시 통합 브랜치에 병합하는 방식으로 
+진행됩니다. 이러한 토픽 브랜치는 '피처 브랜치(Feature branch)' 라고 
+부르기도 합니다.
+
+브랜치는 branch 란 명령어로 만들 수 있습니다.
+$ git branch <branchname>
+
+옵션을 지정하지 않고 branch 명령어를 실행하면 브랜치 목록 전체를
+ 확인할 수 있습니다. 앞 부분에 * 이 붙어있는 것이 현재 선택된 
+브랜치입니다.
+$ git branch
+  issue1
+* master
+
+브랜치 전환하기
+Git 에서는 항상 작업할 브랜치를 미리 선택해야 합니다. 
+처음에 Git을 설치하게 되면 'master' 브랜치가 선택되어 있죠. 
+현재 선택된 브랜치가 아닌 다른 브랜치에서 작업하고 싶을 때에는,
+'체크아웃(checkout)' 명령어를 실행하여 원하는 브랜치로 전환할 
+수 있습니다. 체크아웃을 실행하면, 우선 브랜치 안에 있는 마지막 커밋 
+내용이 작업 트리에 펼쳐집니다. 브랜치가 전환 되었으므로 이 후에 
+실행한 커밋은 전환한 브랜치에 추가됩니다.
+
+HEAD 
+'HEAD' 란 현재 사용 중인 브랜치의 선두 부분을 나타내는 이름입니다. 
+기본적으로는 'master'의 선두 부분을 나타냅니다. 'HEAD' 를 이동하면, 
+사용하는 브랜치가 변경됩니다.
+
+커밋을 지정할 때, '~(틸드, 물결기호)'와 '^(캐럿, 삽입기호)'을 사용하여 
+현재 커밋으로부터 특정 커밋의 위치를 가리킬 수 있습니다. 이 때 자주 
+사용하는 것이 'HEAD' 로서, '~(틸드)'와 숫자를 'HEAD' 뒤에 붙여 몇 
+세대 앞의 커밋을 가리킬 수 있습니다. '^(캐럿)'은, 브랜치 병합에서 
+원본이 여럿 있는 경우 몇 번째 원본인지를 지정할 수 있습니다.
+
+HEAD~3 - HEAD~2 or HEAD~1^1 - HEAD~1 or HEAD^ - HEAD
+                           - HEAD~1^2
+
+Stash
+커밋하지 않은 변경 내용이나 새롭게 추가한 파일이 인덱스와 작업 트리에
+남아 있는 채로 다른 브랜치로 전환(checkout)하면, 그 변경 내용은 기존
+브랜치가 아닌 전환된 브랜치에서 커밋할 수 있습니다.
+
+단, 커밋 가능한 변경 내용 중에 전환된 브랜치에서도 한 차례 변경이 
+되어 있는 경우에는 체크아웃에 실패할 수 있습니다. 이 경우 이전 
+브랜치에서 커밋하지 않은 변경 내용을 커밋하거나, stash 를 이용해 
+일시적으로 변경 내용을 다른 곳에 저장하여 충돌을 피하게 한 뒤 
+체크아웃을 해야 합니다.
+
+stash 란, 파일의 변경 내용을 일시적으로 기록해두는 영역입니다. 
+stash 를 사용하여 작업 트리와 인덱스 내에서 아직 커밋하지 않은 변경을
+일시적으로 저장해 둘 수 있습니다. 이 stash 에 저장된 변경 내용은 
+나중에 다시 불러와 원래의 브랜치나 다른 브랜치에 커밋할 수 있습니다.
+
+앞에서 우리가 새로 만든 'issue1'라는 이름의 브랜치를 사용하여 어떤 
+작업을 수행하려면, 이 브랜치를 사용 하겠다고 명시적으로 지정해 
+주어야 합니다. 이 때 사용하는 명령어가 바로 checkout 입니다. 
+체크아웃(checkout)이란, 내가 사용할 브랜치를 지정하는 것을 의미합니다.
+
+다음과 같이checkout 명령어 뒤에 사용할 브랜치 이름을 입력하면 됩니다.
+$ git checkout <branch>
+아래와 같이 입력하여 'issue1' 브랜치를 체크아웃 해 봅시다.
+$ git checkout issue1
+Switched to branch 'issue1'
+
+checkout 명령에 -b 옵션을 넣으면 브랜치 작성과 체크아웃을 한꺼번에 
+실행할 수 있습니다.
+$ git checkout -b <branch>
+
+'issue1' 브랜치를 체크아웃한 상태에서 커밋을 수행하면, 
+'issue1' 브랜치에 그 이력이 기록됩니다. mylife.txt 에 아래 박스에서와 
+같이 문장을 추가한 후에 커밋해봅시다.
+
+원숭이도 이해할 수 있는 Git 명령어
+add: 변경 사항을 만들어서 인덱스에 등록해보기
+$ git add myfile.txt
+$ git commit -m "add 설명을 추가"
+[issue1 b2b23c4] add 설명을 추가
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+Merge
+merge 를 사용하면, 여러 개의 브랜치를 하나로 모을 수 있습니다.
+예를 들어, 아래 그림과 같이 'master' 브랜치에서 분기하는 'bugfix'라는 
+브랜치가 있다고 가정해 봅시다.
+
+이 'bugfix' 브랜치를 'master' 브랜치로 병합할 때, 'master' 브랜치의 
+상태가 이전부터 변경되어 있지만 않으면 매우 쉽게 병합할 수 있습니다.
+'bugfix' 브랜치의 이력은 'master' 브랜치의 이력을 모두 포함하고 있기 
+때문에, 'master' 브랜치는 단순히 이동하기만 해도 'bugfix' 브랜치의 
+내용을 적용할 수 있습니다. 또한 이 같은 병합은 'fast-forward(빨리 감기)
+병합'이라고 부릅니다.
+
+하지만 'bugfix' 브랜치를 분기한 이후에 'master' 브랜치에 여러 가지 
+변경 사항이 적용되는 경우도 있습니다. 이 경우에는 'master' 브랜치 
+내의 변경 내용과 'bugfix' 브랜치 내의 변경 내용을 하나로 통합할 
+필요가 있습니다.
+
+따라서 양쪽의 변경을 가져온 'merge commit(병합 커밋)'을 실행하게 
+됩니다. 병합 완료 후, 통합 브랜치인 'master' 브랜치로 통합된 이력이 
+생기게 됩니다.
+
+병합 실행 시에 'fast-forward 병합'이 가능한 경우라도 
+'non fast-forward 병합' 옵션을 지정하여 만들어 낼 수도 있습니다.
+'non fast-forward 병합'을 실행하면, 브랜치가 그대로 남기 때문에 
+그 브랜치로 실행한 작업 확인 및 브랜치 관리 면에서 더 유용할 수 있습니다.
+
+브랜치 병합은 merge 명령어로 실행합니다. 이 명령어에 병합할 커밋 
+이름을 넣어 실행하면, 지정한 커밋 내용이 'HEAD'가 가리키고 있는 
+브랜치에 넣어집니다. 'HEAD'는 현재 사용중인 브랜치에 위치하게 
+됩니다. 위 그림에서는 'issue1' 커밋에 'HEAD'가 위치하고 있습니다.
+$ git merge <commit>
+
+master' 브랜치에 'issue1'를 넣기 위해서는 우선 'master' 브랜치에 
+'HEAD'가 위치하게 만들어야 합니다. 이 때에는 checkout 명령어를 
+이용하여 현재 사용중인 브랜치를 'master'로 전환합니다.
+$ git checkout master
+Switched to branch 'master'
+
+병합하기 전에 myfile.txt 파일을 열어 내용을 확인합니다.
+원숭이도 이해할 수 있는 Git 명령어
+
+이번 실습에서의 파일 편집은 'issue1' 브랜치에서 실행 했기 때문에 
+'master' 브랜치로 브랜치를 전환한 지금, myfile.txt 파일을 확인했을 때 
+그 내용이 변경되어 있지 않아야 합니다.
+$ git merge issue1
+Updating 1257027..b2b23c4
+Fast-forward
+ myfile.txt |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+이제 'master' 브랜치가 가리키는 커밋이 'issue1'과 같은 위치로 이동했습니다. 
+이런 방식의 병합을 'fast-forward (빨리감기) 병합'이라고 합니다.
+
+Rebase
+위와 마찬가지로, 'master' 브랜치에서 분기하는 'bugfix' 브랜치가 
+있다고 가정합니다.
+
+우선 'bugfix' 브랜치를 'master' 브랜치에 rebase 하면, 'bugfix' 브랜치의
+이력이 'master' 브랜치 뒤로 이동하게 됩니다.
+
+이 때 이동하는 커밋 X와 Y 내에 포함되는 내용이 'master'의 커밋된 
+버전들과 충돌하는 부분이 생길 수 있습니다. 그 때는 각각의 커밋에서 
+발생한 충돌 내용을 수정할 필요가 있습니다.
+
+'rebase'만 하면 아래 그림에서와 같이, 'master'의 위치는 그대로 
+유지됩니다. 'master' 브랜치의 위치를 변경하기 위해서는 'master' 
+브랜치에서 'bugfix' 브랜치를 fast-foward(빨리감기) 병합 하면 됩니다.
+
+$ git rebase master
+First, rewinding head to replay your work on top of it...
+Applying: pull 설명을 추가
+Using index info to reconstruct a base tree...
+<stdin>:13: new blank line at EOF.
++
+warning: 1 line adds whitespace errors.
+Falling back to patching base and 3-way merge...
+Auto-merging myfile.txt
+CONFLICT (content): Merge conflict in myfile.txt
+Failed to merge in the changes.
+Patch failed at 0001 pull 설명을 추가
+
+When you have resolved this problem run "git rebase --continue".
+If you would prefer to skip this patch, instead run "git rebase --skip".
+To check out the original branch and stop rebasing run "git rebase --abort".
+
+rebase 의 경우 충돌 부분을 수정 한 후에는 commit 이 아니라 rebase 
+명령에 --continue 옵션을 지정하여 실행해야 합니다.
+$ git add myfile.txt
+$ git rebase --continue
+Applying: pull 설명을 추가
+
+만약 rebase 자체를 취소하려면 --abort 옵션을 지정하면 됩니다.
+
+merge 와 rebase 는 통합 브랜치에 토픽 브랜치를 통합하고자 하는 목적은 같으나, 그 특징은 약간 다릅니다.
+
+merge
+변경 내용의 이력이 모두 그대로 남아 있기 때문에 이력이 복잡해짐.
+rebase
+이력은 단순해지지만, 원래의 커밋 이력이 변경됨. 
+정확한 이력을 남겨야 할 필요가 있을 경우에는 사용하면 안됨.
+
+merge 와 rebase 는 팀 운용 방침에 따라 구별해 쓸 수 있습니다.
+예를 들어 이력을 하나로 모두 모아서 처리하도록 운용한다고 치면 
+토픽 브랜치에 통합 브랜치의 최신 코드를 적용할 경우에는 rebase 를 
+사용, 통합 브랜치에 토픽 브랜치를 불러올 경우에는 우선 rebase 를 한 
+후 merge
+
+브랜치 삭제하기
+issue1' 브랜치의 내용이 모두 'master'에 통합 되었기 때문에 이제 
+더 이상 'issue1' 브랜치가 필요없게 되었습니다.
+
+브랜치를 삭제하려면 branch 명령에 -d 옵션을 지정하여 실행하면 됩니다.
+$ git branch -d <branchname>
+
+'issue1' 브랜치를 삭제하려면, 다음 명령어를 실행합니다.
+$ git branch -d issue1
+Deleted branch issue1 (was b2b23c4).
+이제 'issue1' 브랜치는 삭제되었습니다. 
+
+정말로 브랜치가 잘 삭제 되었는지 branch 명령어를 이용해서 확인합니다. 
+아래와 같이 'master' 브랜치만 목록에 남아 있게 됩니다.
+$ git branch
+* master
+
+원격 저장소의 데이터를 로컬 저장소에 가져와 병합하기
+로컬 저장소의 모든 변경 사항이 반영되어 있는 상태에서 새로운 변경 
+사항이 있는 원격 저장소의 커밋 Y 를 로컬로 가져오는 경우를 살펴 
+보도록 하겠습니다.
+원격 A->B->X->Y origin/master
+로컬 A->B master
+
+이런 경우, 단순히 'fast-forward 병합'이 이루어집니다. 그림 속의 
+'master'는 로컬 저장소의 'master' 브랜치, 'origin/master'는 
+원격 저장소 'origin'의 'master' 브랜치를 나타냅니다.
+A->B->X->Y master & origin/master
+
+그러나 로컬 저장소의 'master' 브랜치에서도 변경 사항이 생긴 경우, 
+양 쪽의 변경을 통합할 필요가 있습니다.
+원격 A->B->X->Y origin/master
+로컬 A->B->C->D master
+
+이 때 pull 을 실행하여 소스를 병합할 수 있습니다. 
+충돌하는 변경이 없을 경우 자동적으로 병합 커밋이 만들어 지지만, 
+충돌이 있을 경우에는 충돌난 부분을 수동으로 해결한 다음 
+직접 commit 을 해 주어야 합니다.
+A->B->X->Y origin master ->E master
+      ->C->D->
+
+원격 저장소의 데이터를 로컬에 가져오기만 하기
+pull 을 실행하면, 원격 저장소의 내용을 가져와 자동으로 병합 작업을 
+실행하게 됩니다. 그러나 단순히 원격 저장소의 내용을 확인만 하고 로컬
+데이터와 병합은 하고 싶지 않은 경우에는 fetch 명령어를 사용할 수 
+있습니다.
+
+fetch 를 실행하면, 원격 저장소의 최신 이력을 확인할 수 있습니다. 
+이 때 가져온 최신 커밋 이력은 이름 없는 브랜치로 로컬에 가져오게 
+됩니다. 이 브랜치는 'FETCH_HEAD'의 이름으로 체크아웃 할 수도 
+있습니다.
+
+예를 들어, 로컬 저장소와 원격 저장소에 B에서 진행된 커밋이 있는 
+상태에서 fetch 를 수행하면 아래 그림과 같이 이력이 남겨집니다.
+
+이 상태에서 원격 저장소의 내용을 로컬 저장소의 'master'에 통합하고 
+싶은 경우에는, 'FETCH_HEAD' 브랜치를 merge 하거나 다시 pull 을 
+실행하면 됩니다.
+
+이렇게 fetch 후 merge 를 수행하면, pull 명령을 실행했을 때와 같은 
+이력이 만들어집니다. 사실 pull 이라는 것은 내부적으로 보면 
+fetch + merge 이기 때문이죠!
+
+로컬 저장소의 데이터를 원격 저장소로 밀어넣기
+로컬 저장소에서 원격 저장소로 push(밀어넣기) 할 때에는, 
+push 한 브랜치가 'fast-forward 병합' 방식으로 처리 되도록 지정해 
+둘 필요가 있습니다.
+
+push 하지 않는 한 원격 저장소에 영향을 주지 않고 자신만의 
+브랜치에서 자유롭게 작업 할 수 있습니다. 그러나 로컬 저장소에서 
+작성한 브랜치를 공유하려면 명시적으로 원격 저장소로 push 해야 합니다.
+
+원격 저장소에서 모두가 공유하고 있는 커밋은 기본적으로 덮어쓰거나(overwrite) 
+임의로 변경해서는 안됩니다. 만약 그럴 경우, 그 원격 저장소와 
+동기화되어 있는 다른 저장소들의 이력에 모두 영향을 줄 테니깐요.
+
+태그
+태그란, 커밋을 참조하기 쉽도록 알기 쉬운 이름을 붙이는 것을 말합니다.
+
+한 번 붙인 태그는 브랜치처럼 위치가 이동하지 않고 고정됩니다.
+
+Git 에서는 일반적으로 이름 정보만을 갖는 '태그(Lightweight tag)'와 
+보다 상세한 정보를 포함하는 '주석 태그(Annotated tag)', 이 두 가지 
+태그를 사용할 수 있습니다.
+
+일반 태그(Lightweight tag)
+이름만 붙일 수 있어요
+
+주석 태그(Annotated tag)
+이름을 붙일 수 있어요
+태그에 대한 설명도 포함할 수 있어요
+서명도 넣을 수 있어요
+이 태그를 만든 사람의 이름, 이메일과 태그를 만든 날짜 정보도 
+포함시킬 수 있어요
+
+보통 '릴리스 브랜치(Release branch)'에서는 주석 태그를 사용하여 
+설명이나 서명을 넣은 보다 상세한 정보를 포함하는 태그를 사용하고, 
+로컬에서 일시적으로 사용하는 '토픽 브랜치(Topic branch)'에서는 
+이름만 만들어 붙이는 태그를 사용합니다.
+
+태그를 추가하려면 tag 명령어를 사용합니다. 
+<tagname>에는 태그 이름을 지정합니다.
+$ git tag <tagname>
+
+현재 'HEAD'가 가리키고 있는 커밋에 'apple' 이라는 태그를 달려면, 
+다음과 같은 명령어를 실행합니다.
+$ git tag apple
+
+파라미터 없이 tag 명령어를 실행하면, 태그 목록을 볼 수 있습니다.
+$ git tag
+apple
+
+또한 log 명령어에 --decorate 옵션을 붙여 실행하면, 
+태그 정보를 포함한 이력을 확인할 수 있습니다.
+$ git log --decorate
+commit e7978c94d2104e3e0e6e4a5b4a8467b1d2a2ba19 (HEAD, tag: apple, master)
+Author: yourname <yourname@yourmail.com>
+Date:   Wed Jul 18 16:43:27 2012 +0900
+
+    first commit
+
+주석이 달린 태그를 추가하려면 tag 명령어에 -a 옵션을 지정하여 
+실행하면 됩니다. 엔터키를 눌러 실행한 후 태그에 대한 주석 내용을 
+바로 입력합니다. -m 옵션을 지정하여 명령어를 실행할 때에 바로 
+내용을 입력할 수도 있습니다.
+$ git tag -a <tagname>
+
+현재 'HEAD'가 가리키고 있는 커밋에 'banana'라는 주석이 달린 태그를 
+달려면 다음과 같이 명령어를 실행하면 됩니다.
+$ git tag -am "누구나 쉽게 이해할 수 있는 Git 입문" banana
+
+-n 옵션을 지정하여 tag 명령어를 실행하면 태그 목록과 주석 내용을 확인할 수 있습니다.
+$ git tag -n
+apple           first commit
+banana          누구나 쉽게 이해할 수 있는 Git 입문
+
+태그를 삭제하려면, tag 명령어에 -d 옵션을 지정하여 실행합니다.
+$ git tag -d <tagname>
+
+이전에 작성한 커밋 수정하기
+--amend 옵션을 지정하여 커밋을 수행하면, 같은 브랜치 상에서 이전에 
+커밋했던 내용에 새로운 내용을 추가하거나 설명을 수정할 수 있습니다.
+
+이럴 때 사용하기 :
+누락된 파일을 새로 추가하거나 기존의 파일을 업데이트 해야할 때
+이전 커밋의 설명을 변경하고 싶을 때
+
+log 명령어를 실행하여 이력을 확인합니다.
+$ git log
+commit 326fc9f70d022afdd31b0072dbbae003783d77ed
+Author: yourname <yourname@yourmail.com>
+Date:   Mon Jul 16 23:17:56 2012 +0900
+
+    add의 설명을 추가
+
+commit 48eec1ddf73a7fb508ef664efd6b3d873631742f
+Author: yourname <yourname@yourmail.com>
+Date:   Mon Jul 16 23:16:14 2012 +0900
+
+    first commit
+
+이제 sample.txt 파일을 열고 commit 의 설명을 추가합니다.
+원숭이도 이해할 수 있는 Git 명령어
+add: 변경 사항을 만들어서 인덱스에 등록해보기
+commit: 인덱스의 상태를 기록하기
+
+--amend 옵션을 이용하여 커밋합니다.
+$ git add sample.txt
+$ git commit --amend
+
+열려진 편집기에서는 최근에 커밋한 내용이 포함되어 있을 것입니다. 
+내용을「add와 commit의 설명을 추가」로 바꾸어 넣은 다음 저장하고 
+빠져 나옵니다.
+
+이로써 커밋의 내용이 수정 되었습니다. log 명령어에서 이력과 
+커밋 메시지를 확인해 봅니다.
+
+$ git log
+commit e9d75a02e62814541ee0410d9c1d1bf47ab1c057
+Author: yourname <yourname@yourmail.com>
+Date:   Mon Jul 16 23:17:56 2012 +0900
+
+    add와 commit의 설명을 추가
+
+commit 48eec1ddf73a7fb508ef664efd6b3d873631742f
+Author: yourname <yourname@yourmail.com>
+Date:   Mon Jul 16 23:16:14 2012 +0900
+
+    first commit
+
+이전에 작성한 커밋 지우기
+revert 명령어를 이용하면, 특정 커밋의 내용을 삭제할 수 있습니다. 
+rebase -i 명령어나 reset 명령어를 통해 커밋을 삭제할 수도 있지만, 
+해당 커밋이 이미 공개된 상태인 경우에는 이러한 삭제 작업을 함부로 
+하기 어렵습니다. 이러한 경우에는 revert 명령어를 이용해서 특정 
+커밋의 내용을 지우는 새로운 커밋(B')을 만들어 보다 안전하게 처리할
+수 있습니다.
+
+revert 명령어를 사용하여 커밋 B의 내용을 뒤집어 원래의 커밋 A의
+상태로 돌아갈 수 있는 새로운 커밋 B'를 만들 수 있음을 알 수 있습니다.
+
+revert 를 사용하여 'pull의 설명을 추가'하는 커밋을 취소합니다.
+$ git revert HEAD
+[master d47bb1d] Revert "pull의 설명을 추가"
+ 1 files changed, 1 insertions(+), 2 deletions(-)
+
+커밋을 버리고 특정 버전으로 다시 되돌아가기
+reset 명령어를 이용하면 더 이상 필요 없어진 커밋들을 버릴 수 있습니다. 
+명령어 실행 시 어떤 모드로 실행할 지 지정하여 'HEAD' 위치와 인덱스, 
+작업 트리 내용을 함께 되돌릴지 여부를 선택할 수 있습니다.
+모드는 기본적으로 'mixed'가 지정되며, 'soft'와 'hard' 중에서 선택할 수도 있습니다.
+
+이럴 때 사용해 보세요 :
+커밋만 되돌리고 싶을 때 (soft)
+변경한 인덱스의 상태를 원래대로 되돌리고 싶을 때 (mixed)
+최근의 커밋을 완전히 버리고 이전의 상태로 되돌리고 싶을 때 (hard)
+
+reset 을 사용하여 커밋을 삭제합니다.
+$ git reset --hard HEAD~~
+HEAD is now at 326fc9f add의 설명을 추가
+
+reset 전의 커밋은 'ORIG_HEAD'라는 이름으로 참조할 수 있습니다. 
+실수로 reset 을 한 경우에는, 'ORIG_HEAD'로 reset 하여 reset 실행 
+전의 상태로 되돌릴 수 있습니다.
+$ git reset --hard ORIG_HEAD
+HEAD is now at 0d4a808 pull의 설명을 추가
+
+다른 브랜치로부터 특정 커밋을 가져와서 내 브랜치에 넣기
+cherry-pick 을 이용하면 다른 브랜치에서 지정한 커밋을 복사하여 
+현재 브랜치로 가져올 수 있습니다.
+
+이럴 때 사용해 보세요 :
+특정 브랜치에 잘못 추가한 커밋을 올바른 브랜치로 옮기려고 할 때
+다른 브랜치의 커밋을 현재 브랜치에도 추가하고 싶을 때
+
+'master' 브랜치로 이동 한 후, cherry-pick 을 사용하여 
+「commit의 설명을 추가」한 커밋을 꺼내 'master'에 추가합니다. 
+$ git checkout master
+Switched to branch 'master'
+$ git cherry-pick 99daed2
+error: could not apply 99daed2... commit
+hint: after resolving the conflicts, mark the corrected paths
+hint: with 'git add <paths>' or 'git rm <paths>'
+hint: and commit the result with 'git commit'
+
+충돌이 발생했습니다. sample.txt 를 열고 충돌 부분을 수정한 후 커밋합니다.
+$ git add sample.txt
+$ git commit
+
+커밋 이력 편집하기
+rebase 명령어에 'i' 옵션을 지정하면 커밋을 다시 쓰거나 다른 커밋과 
+바꿔 넣을 수 있으며 특정 위치의 커밋을 삭제하거나 여러 커밋을 
+하나로 통합하는 작업을 할 수 있습니다.
+
+이럴 때 사용해 보세요 :
+push 하기 전에 이전의 커밋 내용을 정리하고자 할 때
+그룹으로 묶을 수 있는 커밋들을 알기 쉽게 하나로 통합하려고 할 때
+이전 커밋에 누락된 파일들을 나중에 추가하고자 할 때
+
+과거의 커밋을 통합할 때는 'rebase -i' 를 사용합니다.
+$ git rebase -i HEAD~~
+
+텍스트 에디터가 열리고 'HEAD'에서 'HEAD~~'까지의 커밋이 다음과 같이 표시됩니다.
+pick 9a54fd4 commit의 설명 추가
+pick 0d4a808 pull의 설명을 추가
+# Rebase 326fc9f..0d4a808 onto d286baa
+#
+# Commands:
+#  p, pick = use commit
+#  r, reword = use commit, but edit the commit message
+#  e, edit = use commit, but stop for amending
+#  s, squash = use commit, but meld into previous commit
+#  f, fixup = like "squash", but discard this commit's log message
+#  x, exec = run command (the rest of the line) using shell
+#
+# If you remove a line here THAT COMMIT WILL BE LOST.
+# However, if you remove everything, the rebase will be aborted.
+#
+
+두 번째 줄의 'pick' 문자를 squash로 변경하고 저장 · 종료합니다.
+이로써 두 개의 커밋이 하나의 커밋으로 통합 되었습니다. 
+log 명령어를 실행하여 이력을 확인합니다.
+
+'rebase -i' 를 사용하여 수정할 커밋을 선택합니다.
+$ git rebase -i HEAD~~
+
+텍스트 에디터가 열리고, 'HEAD'에서 'HEAD~~' 까지의 커밋이 다음과 같이 표시됩니다.
+pick 9a54fd4 commit의 설명 추가
+pick 0d4a808 pull 설명을 추가
+# Rebase 326fc9f..0d4a808 onto d286baa
+#
+# Commands:
+#  p, pick = use commit
+#  r, reword = use commit, but edit the commit message
+#  e, edit = use commit, but stop for amending
+#  s, squash = use commit, but meld into previous commit
+#  f, fixup = like "squash", but discard this commit's log message
+#  x, exec = run command (the rest of the line) using shell
+#
+# If you remove a line here THAT COMMIT WILL BE LOST.
+# However, if you remove everything, the rebase will be aborted.
+
+첫 번째 줄의 'pick' 문자를 'edit'으로 변경하여 저장 · 종료합니다. 
+그러면 다음과 같은 출력 되고 수정할 커밋이 체크아웃된 상태가 됩니다.
+Stopped at d286baa... commit의 설명 추가
+You can amend the commit now, with
+        git commit --amend
+Once you are satisfied with your changes, run
+        git rebase --continue
+
+sample.txt 를 열어, commit 의 설명 부분을 적당히 변경합니다.
+원숭이도 이해할 수 있는 Git 명령어
+add: 변경 사항을 만들어서 인덱스에 등록해보기
+commit: 인덱스의 상태를 저장하기
+pull: 원격 저장소의 내용을 가져오기
+
+commit --amend 를 실행하여 변경한 내용을 저장합니다.
+$ git add sample.txt
+$ git commit --amend
+
+commit 을 실행했다고 해서 rebase 작업이 끝난 것은 아닙니다. 
+이 커밋 작업이 종료했다는 것을 알리려면, --continue 옵션을 지정하여 
+rebase 를 실행해야 합니다.
+$ git rebase --continue
+
+이 때, 다른 커밋에서 충돌이 발생할 수 있습니다. 그럴 때에는 충돌 부분
+을 수정한 후 add 와 rebase --continue를 실행하면 됩니다. 이 때, 
+커밋은 필요 없으므로 실행하지 않습니다. 만약 도중에 rebase 작업을 
+중지하고자 하는 경우에는 rebase에 --abort 옵션을 지정하여 실행하면 됩니다.
+
+이제 커밋 수정이 완료 되었습니다
+
+rebase 전의 커밋은 'ORIG_HEAD'라는 이름으로 남아 있습니다. 
+만약 rebase 한 후 원래대로 되돌리고자 하는 경우에는 
+'git reset --hard ORIG_HEAD'을 실행하여 rebase 전의 상태로 되돌릴 수 있습니다.
+
+브랜치상의 커밋을 하나로 모아 병합한다
+이번에는 병합(merge) 할 때 사용할 수 있는, 조금 특별한 옵션인 
+'--squash'를 소개합니다.
+
+이 옵션을 지정하여 브랜치를 병합하면 해당 브랜치의 커밋 전체를 
+통합한 커밋이 추가됩니다.
+
+이럴 때 사용해 보세요 :
+토픽 브랜치 안의 커밋을 한꺼번에 모아서 통합 브랜치에 병합하고자 할 때
+
+'master' 브랜치로 이동한 후, '--squash' 옵션을 지정하여 merge 를 실행합니다.
+$ git checkout master
+Switched to branch 'master'
+$ git merge --squash issue1
+Auto-merging sample.txt
+CONFLICT (content): Merge conflict in sample.txt
+Squash commit -- not updating HEAD
+Automatic merge failed; fix conflicts and then commit the result.
+
+충돌이 발생했으므로, sample.txtㅊ를 열어 충돌 부분을 수정한 후 커밋합니다.
+$ git add sample.txt
+$ git commit
+[master 0d744a7] Conflicts:   sample.txt
+ 1 files changed, 4 insertions(+), 0 deletions(-)
+이로써 'issue1' 브랜치 상의 모든 커밋을 하나로 병합한 내용이 'master' 
+브랜치에 추가되었습니다. log 명령어를 실행하여 이력을 확인합니다.
+
